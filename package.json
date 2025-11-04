@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "puppeteer:install": "npx puppeteer browsers install chrome",
     "build": "next build",
+    "netlify:build": "npm run puppeteer:install && npm run build",
     "start": "next start",
     "lint": "eslint"
   },
