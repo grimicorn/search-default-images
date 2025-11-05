@@ -27,31 +27,30 @@ const getDefaultImagesStore = () => {
 const handler = async (_req, context) => {
   // @todo Only allow *.crossroads.net + Netlify preview for the URL param  and requester.
   // @todo Read Me: How to install Chrome locally + error messaging to direct to the read me
-  // const store = getDefaultImagesStore();
-  // const url = new URL(context.url).searchParams.get("url");
-  // let image = "";
+  const store = getDefaultImagesStore();
+  const url = new URL(context.url).searchParams.get("url");
+  let image = "";
 
-  // try {
-  //   image = await store.get(url, { type: "stream" });
+  try {
+    image = await store.get(url, { type: "stream" });
 
-  //   if (!image) {
-  //     image = await renderScreenshotWithPuppeteer(url);
-  //     await store.set(url, image);
-  //   }
-  // } catch (error) {
-  //   console.error(error);
-  // } finally {
-  //   return new Response(image, {
-  //     headers: { "content-type": "image/jpeg" },
-  //   });
-  // }
+    if (!image) {
+      image = await renderScreenshotWithPuppeteer(url);
+      await store.set(url, image);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    return new Response(image, {
+      headers: { "content-type": "image/jpeg" },
+    });
+  }
 
-  //
-  return new Response(
-    JSON.stringify({
-      CHROME_PATH: process.env.CHROME_PATH ?? "None",
-    })
-  );
+  // return new Response(
+  //   JSON.stringify({
+  //     CHROME_PATH: process.env.CHROME_PATH ?? "None",
+  //   })
+  // );
 };
 
 export default handler;
