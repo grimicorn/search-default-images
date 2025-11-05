@@ -46,6 +46,7 @@ const handler = async (_req, context) => {
   //   });
   // }
 
+  //
   return new Response(
     JSON.stringify({
       CHROME_PATH: process.env.CHROME_PATH ?? "None",
