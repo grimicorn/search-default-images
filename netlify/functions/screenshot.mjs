@@ -35,10 +35,10 @@ const handler = async (_req, context) => {
   try {
     image = await store.get(url, { type: "stream" });
 
-    if (!image) {
-      image = await renderScreenshotWithPuppeteer(url);
-      await store.set(url, image);
-    }
+    // if (!image) {
+    image = await renderScreenshotWithPuppeteer(url);
+    await store.set(url, image);
+    // }
   } catch (error) {
     errorMsg = error;
     console.error(error);
