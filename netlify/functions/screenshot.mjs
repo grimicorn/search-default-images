@@ -30,6 +30,7 @@ const handler = async (_req, context) => {
   const store = getDefaultImagesStore();
   const url = new URL(context.url).searchParams.get("url");
   let image = "";
+  let errorMsg = null;
 
   try {
     image = await store.get(url, { type: "stream" });
@@ -39,11 +40,18 @@ const handler = async (_req, context) => {
       await store.set(url, image);
     }
   } catch (error) {
+    errorMsg = error;
     console.error(error);
   } finally {
-    return new Response(image, {
-      headers: { "content-type": "image/jpeg" },
-    });
+    return new Response(
+      JSON.stringify({
+        image,
+        errorMsg,
+      })
+    );
+    // return new Response(image, {
+    //   headers: { "content-type": "image/jpeg" },
+    // });
   }
 
   // return new Response(
