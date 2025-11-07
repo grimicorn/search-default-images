@@ -30,35 +30,21 @@ const handler = async (_req, context) => {
   const store = getDefaultImagesStore();
   const url = new URL(context.url).searchParams.get("url");
   let image = "";
-  let errorMsg = null;
 
   try {
     image = await store.get(url, { type: "stream" });
 
-    // if (!image) {
-    image = await renderScreenshotWithPuppeteer(url);
-    await store.set(url, image);
-    // }
+    if (!image) {
+      image = await renderScreenshotWithPuppeteer(url);
+      await store.set(url, image);
+    }
   } catch (error) {
-    errorMsg = error;
     console.error(error);
   } finally {
-    return new Response(
-      JSON.stringify({
-        image,
-        errorMsg,
-      })
-    );
-    // return new Response(image, {
-    //   headers: { "content-type": "image/jpeg" },
-    // });
+    return new Response(image, {
+      headers: { "content-type": "image/jpeg" },
+    });
   }
-
-  // return new Response(
-  //   JSON.stringify({
-  //     CHROME_PATH: process.env.CHROME_PATH ?? "None",
-  //   })
-  // );
 };
 
 export default handler;
